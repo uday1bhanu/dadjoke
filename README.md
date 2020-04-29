@@ -1,2 +1,2 @@
 # dadjoke
-Dad joke Application
+Dad joke Application that returns random dad joke
