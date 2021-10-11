@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class DadJokeController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private static List<String> dadJokes;
+    private static Map<String, String> env;
 
     static {
         dadJokes = new ArrayList<String>() {{
@@ -39,6 +41,7 @@ public class DadJokeController {
             add("A NEUTRON WALKS INTO A BAR AND ORDERS A DRINK. THE BARMAN SAYS --> FOR YOU, NO CHARGE!");
             add("TWO ATOMS WALK INTO A PUB.  ONE TURNS TO THE OTHER AND SAYS, 'I THINK I'VE LOST AN ELECTRON!.'  THE FIRST ONE SAYS, 'ARE YOU SURE?'.  THE OTHER ONE SAYS..... I'M POSITIVE.");
         }};
+        env = System.getenv();
     }
     /**
      * Get dadjoke
@@ -47,7 +50,10 @@ public class DadJokeController {
      */
     @RequestMapping(value = "/dadjoke", method = RequestMethod.GET)
     public String dadjoke(){
-        String dadJoke = dadJokes.get((int)(Math.random()*(dadJokes.size())));
+        String dataCenter = env.get("DC_NAME");
+        String cluster = env.get("CLUSTER_NAME");
+        String verion = env.get("VERSION");
+        String dadJoke = dataCenter + "-" + cluster + "-"+verion + "-"+dadJokes.get((int)(Math.random()*(dadJokes.size())));
         logger.info(dadJoke);
         return dadJoke;
     }
